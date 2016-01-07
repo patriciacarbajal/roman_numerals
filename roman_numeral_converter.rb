@@ -1,4 +1,4 @@
-class RomanToArabicConverter
+class RomanArabicConverter
 
   ROMAN_TO_ARABIC_MAP = {
     "M"=>1000,
@@ -16,18 +16,26 @@ class RomanToArabicConverter
     "I"=>1
   }
 
-  def convert(roman)
+  def convert_to_arabic(roman)
     raise "input must be a string" if !roman.is_a?(String)
-    keys = ROMAN_TO_ARABIC_MAP.keys
     result = 0
-    keys.each do |i|
-      while roman.start_with?(i)
-        result += ROMAN_TO_ARABIC_MAP[i]
-        roman = roman.slice(i.length, (roman.length - i.length))
+    ROMAN_TO_ARABIC_MAP.each do |numeral, value|
+      while roman.start_with?(numeral)
+        result += value
+        roman.slice!(0..numeral.length-1)
       end
     end
     raise "invalid roman input" if !roman.empty?
     result
   end
 
+  def convert_to_roman(arabic)
+    raise "input must be a positive integer" if (!arabic.is_a?(Integer) || arabic < 1 )
+    result = ""
+    ROMAN_TO_ARABIC_MAP.each do |numeral, value|
+      result << numeral * (arabic / value)
+      arabic = arabic % value
+    end
+    result
+  end
 end
